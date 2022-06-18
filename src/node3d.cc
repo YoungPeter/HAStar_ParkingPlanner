@@ -17,6 +17,7 @@
 /*
  * @file
  */
+#include<cmath>
 
 #include "node3d.h"
 
@@ -25,7 +26,7 @@
 // namespace apollo {
 // namespace planning {
 
-//using apollo::common::math::Box2d;
+// using apollo::common::math::Box2d;
 
 Node3d::Node3d(double x, double y, double phi)
 {
@@ -103,9 +104,16 @@ Box2d Node3d::GetBoundingBox(const VehicleParam &vehicle_param_,
   double ego_width = vehicle_param_.width;
   double shift_distance =
       ego_length / 2.0 - vehicle_param_.back_edge_to_center;
-  Box2d ego_box; //(
-                 //{x + shift_distance * std::cos(phi), y + shift_distance * std::sin(phi)},
-                 // phi, ego_length, ego_width);
+  double cos_heading = std::cos(phi);
+  double sin_heading = std::sin(phi);
+  Box2d ego_box{Vec2d{x + shift_distance * cos_heading, y + shift_distance * sin_heading},
+                ego_length,
+                ego_width,
+                ego_length / 2.0,
+                ego_width / 2.0,
+                phi,
+                cos_heading,
+                sin_heading};
   return ego_box;
 }
 
@@ -114,9 +122,10 @@ bool Node3d::operator==(const Node3d &right) const
   return right.GetIndex() == index_;
 }
 
-std::string Node3d::ComputeStringIndex(int x_grid, int y_grid, int phi_grid) {
+std::string Node3d::ComputeStringIndex(int x_grid, int y_grid, int phi_grid)
+{
   return std::to_string(x_grid) + "_" + std::to_string(y_grid) + "_" + std::to_string(phi_grid);
-  //return absl::StrCat(x_grid, "_", y_grid, "_", phi_grid);
+  // return absl::StrCat(x_grid, "_", y_grid, "_", phi_grid);
 }
 
 // }  // namespace planning

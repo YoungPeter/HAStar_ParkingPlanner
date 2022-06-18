@@ -640,8 +640,17 @@ bool HybridAStar::Plan(
     size_t vertices_num = obstacle_vertices.size();
     std::vector<LineSegment2d> obstacle_linesegments;
     for (size_t i = 0; i < vertices_num - 1; ++i) {
-      LineSegment2d line_segment = LineSegment2d{
-          obstacle_vertices[i], obstacle_vertices[i + 1]};
+      Vec2d start = obstacle_vertices[i], end = obstacle_vertices[i+1];
+      const double dx = end.x_ - start.x_;
+      const double dy = end.y_ - start.y_;
+      const double length = std::hypot(dx, dy);
+      Vec2d unit_direction = (length <= kMathEpsilon ? Vec2d{0, 0} : Vec2d{dx/length, dy/length});
+      const double heading = math::GetVecAngle(unit_direction);
+      LineSegment2d line_segment = LineSegment2d{start,
+                                                 end,
+                                                 unit_direction,
+                                                 heading,
+                                                 length};
       obstacle_linesegments.emplace_back(line_segment);
     }
     obstacles_linesegments_vec.emplace_back(obstacle_linesegments);
