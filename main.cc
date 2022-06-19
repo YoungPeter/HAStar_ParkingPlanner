@@ -73,16 +73,16 @@ int main()
   double ephi = M_PI_2;
   HybridAStartResult result;
   const WarmStartConfig warm_start_config;
-   
+
   std::unique_ptr<HybridAStar> hybrid_test = std::unique_ptr<HybridAStar>(
-         new HybridAStar(warm_start_config));
+      new HybridAStar(warm_start_config));
   hybrid_test->Plan(sx, sy, sphi, ex, ey, ephi, XYbounds,
-                                 obstacle, &result);
-  
+                    obstacle, &result);
+
   PlotObstacles(obstacle);
-  PlotVehicleTraj(result.x,result.y,result.phi);
+  PlotVehicleTraj(result.x, result.y, result.phi);
   plt::show();
-  
+
   std::cout << "test" << std::endl;
   return 0;
 }

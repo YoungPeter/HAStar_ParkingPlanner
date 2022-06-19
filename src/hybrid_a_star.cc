@@ -114,10 +114,10 @@ bool HybridAStar::ValidityCheck(std::shared_ptr<Node3d> node) {
            obstacle_linesegments) {
         //if (bounding_box.HasOverlap(linesegment)) {
         if (math::HasOverlap(bounding_box, linesegment)) {
-          std::cout << "collision start at x: " << linesegment.start_.x_;
-          std::cout << "collision start at y: " << linesegment.start_.y_;
-          std::cout << "collision end at x: " << linesegment.end_.x_;
-          std::cout << "collision end at y: " << linesegment.end_.y_;
+          // std::cout << "collision start at x: " << linesegment.start_.x_;
+          // std::cout << "collision start at y: " << linesegment.start_.y_;
+          // std::cout << "collision end at x: " << linesegment.end_.x_;
+          // std::cout << "collision end at y: " << linesegment.end_.y_;
           return false;
         }
       }

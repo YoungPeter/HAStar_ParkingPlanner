@@ -59,7 +59,6 @@ bool ReedShepp::ShortestRSP(const std::shared_ptr<Node3d> start_node,
                             const std::shared_ptr<Node3d> end_node,
                             std::shared_ptr<ReedSheppPath> optimal_path) {
   std::vector<ReedSheppPath> all_possible_paths;
-   std::cout << "Start" << std::endl;
    
   if (!GenerateRSP(start_node, end_node, &all_possible_paths)) {
     std::cout << "Fail to generate different combination of Reed Shepp "
@@ -146,15 +145,15 @@ bool ReedShepp::GenerateRSP(const std::shared_ptr<Node3d> start_node,
   double s = std::sin(start_node->GetPhi());
   // normalize the initial point to (0,0,0)
 
-  std::cout << "c:" << c  << std::endl;
-  std::cout << "dx:" << dx << std::endl;
-  std::cout << "s:" << s << std::endl;
-  std::cout << "dy:" << dy << std::endl;
-  std::cout << "max_kappa_" << max_kappa_<< std::endl;
+  // std::cout << "c:" << c  << std::endl;
+  // std::cout << "dx:" << dx << std::endl;
+  // std::cout << "s:" << s << std::endl;
+  // std::cout << "dy:" << dy << std::endl;
+  // std::cout << "max_kappa_" << max_kappa_<< std::endl;
 
   double x = (c * dx + s * dy) * max_kappa_;
   double y = (-s * dx + c * dy) * max_kappa_;
-  std::cout << "Start GenerateRSP" << std::endl;
+  //std::cout << "Start GenerateRSP" << std::endl;
 
 
   if (!SCS(x, y, dphi, all_possible_paths)) {
