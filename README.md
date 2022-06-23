@@ -7,3 +7,6 @@ The project implemented parking path planning based on Hybrid A Star. The origin
 ## Parking Scence
 ### Vertical parking
 ![image](https://github.com/YoungPeter/HAStar_ParkingPlanner/blob/main/parking_scence/vertical001.png)
+
+### Parallel  parking
+![image](https://github.com/YoungPeter/HAStar_ParkingPlanner/blob/main/parking_scence/parallel001.png)
