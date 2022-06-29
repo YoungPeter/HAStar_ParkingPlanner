@@ -1,8 +1,7 @@
 #ifndef BASIC_TYPE
 #define BASIC_TYPE
 
-struct VehicleParam
-{
+struct VehicleParam {
   double front_edge_to_center = 3.89;
   double back_edge_to_center = 1.043;
   double left_edge_to_center = 1.055;
@@ -23,32 +22,36 @@ struct VehicleParam
   double throttle_deadzone = 15.4;
 };
 
-struct WarmStartConfig
-{
+struct WarmStartConfig {
   // Hybrid a star for warm start
-  double xy_grid_resolution =  0.2;
+  double xy_grid_resolution = 0.2;
   double phi_grid_resolution = 0.0;
   int next_node_num = 10;
   double step_size = 0.5;
   double traj_forward_penalty = 0.0;
   double traj_back_penalty = 0.0;
   double traj_gear_switch_penalty = 10.0;
-  double traj_steer_penalty =100.0;
-  double traj_steer_change_penalty =  10.0;
+  double traj_steer_penalty = 100.0;
+  double traj_steer_change_penalty = 10.0;
   // Grid a star for heuristic
-  double grid_a_star_xy_resolution =  0.1;
-  double node_radius =  0.5;
+  double grid_a_star_xy_resolution = 0.1;
+  double node_radius = 0.5;
   double delta_t = 1.0;
-  //PiecewiseJerkSpeedOptimizerConfig s_curve_config = 17;
-
+  // PiecewiseJerkSpeedOptimizerConfig s_curve_config = 17;
 };
 
-struct Vec2d{
+struct Vec2d {
   double x_ = 0.0;
   double y_ = 0.0;
 };
 
-struct LineSegment2d{
+struct Pos3d {
+  double x;
+  double y;
+  double phi;
+};
+
+struct LineSegment2d {
   Vec2d start_;
   Vec2d end_;
   Vec2d unit_direction_;
@@ -56,8 +59,15 @@ struct LineSegment2d{
   double length_ = 0.0;
 };
 
+struct CurvePath {
+  double x;
+  double y;
+  double phi;
+  double dist;
+  double radius;
+};
 
-struct Box2d{
+struct Box2d {
   Vec2d center_;
   double length_ = 0.0;
   double width_ = 0.0;
