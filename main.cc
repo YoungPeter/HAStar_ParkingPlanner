@@ -1,7 +1,9 @@
 #include <iostream>
+#include <fstream>
 #include <memory>
 
 //#include "src/reeds_shepp_path.h"
+#include "read_conf.h"
 #include "src/basic_type.h"
 #include "src/hybrid_a_star.h"
 #include "result_plot/cpp_plot.h"
@@ -72,10 +74,22 @@ int main()
   double ey = 3.5;
   double ephi = M_PI_2;
   HybridAStartResult result;
-  const WarmStartConfig warm_start_config;
+
+  WarmStartConfig warm_start_config;
+  if(!ReadHybridAStarParam(warm_start_config)){
+    std::cout << "read failed." <<std::endl;
+    return 0;
+  }
+
+  VehicleParam vehicle_param;
+  if(!ReadVehicleParam(vehicle_param)){
+    std::cout << "read failed." <<std::endl;
+    return 0;
+  }
+
 
   std::unique_ptr<HybridAStar> hybrid_test = std::unique_ptr<HybridAStar>(
-      new HybridAStar(warm_start_config));
+      new HybridAStar(warm_start_config, vehicle_param));
   hybrid_test->Plan(sx, sy, sphi, ex, ey, ephi, XYbounds,
                     obstacle, &result);
 

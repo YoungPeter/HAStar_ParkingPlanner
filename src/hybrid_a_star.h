@@ -64,7 +64,7 @@ struct HybridAStartResult {
 
 class HybridAStar {
  public:
-  explicit HybridAStar(const WarmStartConfig& warm_start_config);
+  explicit HybridAStar(const WarmStartConfig& warm_start_config, const VehicleParam &vehicle_param);
   virtual ~HybridAStar() = default;
   bool Plan(double sx, double sy, double sphi, double ex, double ey,
             double ephi, const std::vector<double>& XYbounds,

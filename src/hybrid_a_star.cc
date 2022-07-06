@@ -29,7 +29,8 @@
 // using apollo::common::math::Vec2d;
 // using apollo::cyber::Clock;
 
-HybridAStar::HybridAStar(const WarmStartConfig& warm_start_config) :  warm_start_config_(warm_start_config) {
+HybridAStar::HybridAStar(const WarmStartConfig& warm_start_config, const VehicleParam &vehicle_param ) 
+:  warm_start_config_(warm_start_config), vehicle_param_(vehicle_param) {
   reed_shepp_generator_ =
       std::make_unique<ReedShepp>(vehicle_param_, warm_start_config_);
   grid_a_star_heuristic_generator_ =

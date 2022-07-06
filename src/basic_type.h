@@ -2,41 +2,41 @@
 #define BASIC_TYPE
 
 struct VehicleParam {
-  double front_edge_to_center = 3.89;
-  double back_edge_to_center = 1.043;
-  double left_edge_to_center = 1.055;
-  double right_edge_to_center = 1.055;
-  double length = 4.933;
-  double width = 2.11;
-  double height = 1.48;
-  double min_turn_radius = 5.05386147161;
-  double max_acceleration = 2.0;
-  double max_deceleration = -6.0;
-  double max_steer_angle = 8.20304748437;
-  double max_steer_angle_rate = 8.55211;
-  double steer_ratio = 16;
-  double wheel_base = 2.8448;
-  double wheel_rolling_radius = 0.335;
-  double max_abs_speed_when_stopped = 0.2;
-  double brake_deadzone = 14.5;
-  double throttle_deadzone = 15.4;
+  double front_edge_to_center;
+  double back_edge_to_center;
+  double left_edge_to_center;
+  double right_edge_to_center;
+  double length;
+  double width;
+  double height;
+  double min_turn_radius;
+  double max_acceleration;
+  double max_deceleration;
+  double max_steer_angle;
+  double max_steer_angle_rate;
+  double steer_ratio;
+  double wheel_base;
+  double wheel_rolling_radius;
+  double max_abs_speed_when_stopped;
+  double brake_deadzone;
+  double throttle_deadzone;
 };
 
 struct WarmStartConfig {
   // Hybrid a star for warm start
-  double xy_grid_resolution = 0.2;
-  double phi_grid_resolution = 0.0;
-  int next_node_num = 10;
-  double step_size = 0.5;
-  double traj_forward_penalty = 0.0;
-  double traj_back_penalty = 0.0;
-  double traj_gear_switch_penalty = 10.0;
-  double traj_steer_penalty = 100.0;
-  double traj_steer_change_penalty = 10.0;
+  double xy_grid_resolution;
+  double phi_grid_resolution;
+  int next_node_num;
+  double step_size;
+  double traj_forward_penalty;
+  double traj_back_penalty;
+  double traj_gear_switch_penalty;
+  double traj_steer_penalty;
+  double traj_steer_change_penalty;
   // Grid a star for heuristic
-  double grid_a_star_xy_resolution = 0.1;
-  double node_radius = 0.5;
-  double delta_t = 1.0;
+  double grid_a_star_xy_resolution;
+  double node_radius;
+  double delta_t;
   // PiecewiseJerkSpeedOptimizerConfig s_curve_config = 17;
 };
 
