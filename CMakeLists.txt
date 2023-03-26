@@ -13,7 +13,7 @@ add_subdirectory(src)
 
 add_subdirectory(result_plot) 
 
-add_executable(test main.cc)
+add_executable(test main.cc read_conf.cc)
 
 aux_source_directory(. source_list)
 

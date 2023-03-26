@@ -1,32 +1,6 @@
-/******************************************************************************
- * Copyright 2018 The Apollo Authors. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *****************************************************************************/
-
-/*
- * @file
- */
-#include<cmath>
-
 #include "node3d.h"
 
-//#include "absl/strings/str_cat.h"
-
-// namespace apollo {
-// namespace planning {
-
-// using apollo::common::math::Box2d;
+#include<cmath>
 
 Node3d::Node3d(double x, double y, double phi)
 {
@@ -39,9 +13,6 @@ Node3d::Node3d(double x, double y, double phi,
                const std::vector<double> &XYbounds,
                const double xy_grid_resolution)
 {
-  //   CHECK_EQ(XYbounds.size(), 4U)
-  //       << "XYbounds size is not 4, but" << XYbounds.size();
-
   x_ = x;
   y_ = y;
   phi_ = phi;
@@ -69,11 +40,6 @@ Node3d::Node3d(const std::vector<double> &traversed_x,
                const std::vector<double> &XYbounds,
                const double xy_grid_resolution)
 {
-  //   CHECK_EQ(XYbounds.size(), 4U)
-  //     << "XYbounds size is not 4, but" << XYbounds.size();
-  //   CHECK_EQ(traversed_x.size(), traversed_y.size());
-  //   CHECK_EQ(traversed_x.size(), traversed_phi.size());
-
   x_ = traversed_x.back();
   y_ = traversed_y.back();
   phi_ = traversed_phi.back();
@@ -125,8 +91,4 @@ bool Node3d::operator==(const Node3d &right) const
 std::string Node3d::ComputeStringIndex(int x_grid, int y_grid, int phi_grid)
 {
   return std::to_string(x_grid) + "_" + std::to_string(y_grid) + "_" + std::to_string(phi_grid);
-  // return absl::StrCat(x_grid, "_", y_grid, "_", phi_grid);
 }
-
-// }  // namespace planning
-// }  // namespace apollo

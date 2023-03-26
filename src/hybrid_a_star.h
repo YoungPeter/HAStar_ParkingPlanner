@@ -1,23 +1,3 @@
-/******************************************************************************
- * Copyright 2018 The Apollo Authors. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *****************************************************************************/
-
-/*
- * @file
- */
-
 #ifndef HYBRID_A_STAR
 #define HYBRID_A_STAR
 
@@ -29,29 +9,8 @@
 #include <utility>
 #include <vector>
 
-// #include "cyber/common/log.h"
-// #include "cyber/common/macros.h"
-// #include "cyber/time/clock.h"
-// #include "modules/common/configs/proto/vehicle_config.pb.h"
-// #include "modules/common/configs/vehicle_config_helper.h"
-// #include "modules/common/math/math_utils.h"
-// #include "modules/planning/common/obstacle.h"
-// #include "modules/planning/common/planning_gflags.h"
-// #include "modules/planning/open_space/coarse_trajectory_generator/grid_search.h"
-// #include "modules/planning/open_space/coarse_trajectory_generator/node3d.h"
-// #include "modules/planning/open_space/coarse_trajectory_generator/reeds_shepp_path.h"
-// #include "modules/planning/proto/planner_open_space_config.pb.h"
-
-
-//#include "basic_type.h"
-//#include "math_utils.h"
 #include "grid_search.h"
-//#include "node3d.h"
 #include "reeds_shepp_path.h"
-
-// namespace apollo {
-// namespace planning {
-
 struct HybridAStartResult {
   std::vector<double> x;
   std::vector<double> y;
@@ -135,8 +94,5 @@ class HybridAStar {
   std::unique_ptr<ReedShepp> reed_shepp_generator_;
   std::unique_ptr<GridSearch> grid_a_star_heuristic_generator_;
 };
-
-// }  // namespace planning
-// }  // namespace apollo
 
 #endif

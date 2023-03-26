@@ -1,17 +1,11 @@
-#include "math_utils.h"
-
 #include <cmath>
 #include <limits>
 
+#include "math_utils.h"
 
 namespace math {
 
-double sign(double x){
-  if(x >= 0){
-    return 1;
-  }
-  return -1;
-}
+double sign(double x) { return x >= 0 ? 1 : -1; }
 
 double PtSegDistance(double query_x, double query_y, double start_x,
                      double start_y, double end_x, double end_y,
@@ -261,31 +255,37 @@ bool HasOverlap(const Box2d &bounding_box, const LineSegment2d &line_segment) {
   return DistanceTo(bounding_box, line_segment) <= 1e-10;
 }
 
-Pos3d CalEndPosWithACurvePath(const Pos3d& start_pos, double dist, double radius){
+Pos3d CalEndPosWithACurvePath(const Pos3d &start_pos, double dist,
+                              double radius) {
   Pos3d end_pos;
 
-  if(std::abs(radius) < kMathEpsilon){
+  if (std::abs(radius) < kMathEpsilon) {
     end_pos.x = start_pos.x + std::cos(start_pos.phi) * dist;
     end_pos.y = start_pos.y + std::sin(start_pos.phi) * dist;
     end_pos.phi = start_pos.phi;
-  }else{
-    double theta = start_pos.phi - sign(radius) * M_PI/2.0;
-    end_pos.x = start_pos.x + std::cos(dist/radius + theta) * std::abs(radius)
-                            - std::cos(theta) * std::abs(radius);
-    end_pos.y = start_pos.y + std::sin(dist/radius + theta) * std::abs(radius)
-                            - std::sin(theta) * std::abs(radius);
-    end_pos.phi = start_pos.phi + dist/radius;
+  } else {
+    double theta = start_pos.phi - sign(radius) * M_PI / 2.0;
+    end_pos.x = start_pos.x +
+                std::cos(dist / radius + theta) * std::abs(radius) -
+                std::cos(theta) * std::abs(radius);
+    end_pos.y = start_pos.y +
+                std::sin(dist / radius + theta) * std::abs(radius) -
+                std::sin(theta) * std::abs(radius);
+    end_pos.phi = start_pos.phi + dist / radius;
   }
 
   return end_pos;
 }
 
-Pos3d CalEndPosWithACurvePath(CurvePath curve_path){
-  return CalEndPosWithACurvePath(Pos3d{curve_path.x, curve_path.y, curve_path.phi},
-                                curve_path.dist, curve_path.radius);
+Pos3d CalEndPosWithACurvePath(CurvePath curve_path) {
+  return CalEndPosWithACurvePath(
+      Pos3d{curve_path.x, curve_path.y, curve_path.phi}, curve_path.dist,
+      curve_path.radius);
 }
 
-std::vector<CurvePath> CalCurvePathConnectTwoPose(const Pos3d& start_pos, const Pos3d& end_pos, double r_min){
+std::vector<CurvePath> CalCurvePathConnectTwoPose(const Pos3d &start_pos,
+                                                  const Pos3d &end_pos,
+                                                  double r_min) {
   const double k_min_value = 1e-4;
   double rx_startpos_endpos = CalProjectInX(start_pos, end_pos);
   double ry_startpos_endpos = CalProjectInY(start_pos, end_pos);
@@ -293,55 +293,63 @@ std::vector<CurvePath> CalCurvePathConnectTwoPose(const Pos3d& start_pos, const 
   double theta = NormalizeAngle(end_pos.phi - start_pos.phi);
 
   std::vector<CurvePath> curve_paths;
-  if(std::abs(rx_startpos_endpos) < k_min_value){
+  if (std::abs(rx_startpos_endpos) < k_min_value) {
     return curve_paths;
   }
 
   // a line path
-  if(std::abs(ry_startpos_endpos) < k_min_value && std::abs(theta) < k_min_value){
-    CurvePath line_path{start_pos.x, start_pos.y, start_pos.phi, rx_startpos_endpos, 0};
+  if (std::abs(ry_startpos_endpos) < k_min_value &&
+      std::abs(theta) < k_min_value) {
+    CurvePath line_path{start_pos.x, start_pos.y, start_pos.phi,
+                        rx_startpos_endpos, 0};
     curve_paths.push_back(line_path);
     return curve_paths;
   }
 
   // a circle path
-  if(std::abs(std::atan(ry_startpos_endpos/rx_startpos_endpos) - theta/2.0) < k_min_value){
-    double r = rx_startpos_endpos/std::sin(theta);
-    if(std::abs(r) < r_min){
+  if (std::abs(std::atan(ry_startpos_endpos / rx_startpos_endpos) -
+               theta / 2.0) < k_min_value) {
+    double r = rx_startpos_endpos / std::sin(theta);
+    if (std::abs(r) < r_min) {
       return curve_paths;
     }
 
-    CurvePath circle_path{start_pos.x, start_pos.y, start_pos.phi, r * theta, r};
+    CurvePath circle_path{start_pos.x, start_pos.y, start_pos.phi, r * theta,
+                          r};
     curve_paths.push_back(circle_path);
     return curve_paths;
   }
 
-  if(std::abs(1.0 - std::cos(theta)) <= k_min_value){
+  if (std::abs(1.0 - std::cos(theta)) <= k_min_value) {
     return curve_paths;
   }
 
-  if(std::abs(ry_endpos_startpos) > std::abs(ry_startpos_endpos)){
-    double r = ry_startpos_endpos/(1.0 - std::cos(theta));
-    double line_length = ry_endpos_startpos/std::sin(theta) - r * std::tan(theta/2.0);
+  if (std::abs(ry_endpos_startpos) > std::abs(ry_startpos_endpos)) {
+    double r = ry_startpos_endpos / (1.0 - std::cos(theta));
+    double line_length =
+        ry_endpos_startpos / std::sin(theta) - r * std::tan(theta / 2.0);
 
-    if(std::abs(r) < r_min){
+    if (std::abs(r) < r_min) {
       return curve_paths;
     }
 
-    CurvePath line_path{start_pos.x, start_pos.y, start_pos.phi, line_length, 0};
+    CurvePath line_path{start_pos.x, start_pos.y, start_pos.phi, line_length,
+                        0};
     Pos3d min_pos = CalEndPosWithACurvePath(line_path);
     CurvePath circle_path{min_pos.x, min_pos.y, min_pos.phi, r * theta, r};
     curve_paths.push_back(line_path);
     curve_paths.push_back(circle_path);
-  }else{
-    double r = ry_endpos_startpos/(1.0 - std::cos(theta));
-    double line_length = ry_startpos_endpos/std::sin(theta) - r * std::tan(theta/2.0);
+  } else {
+    double r = ry_endpos_startpos / (1.0 - std::cos(theta));
+    double line_length =
+        ry_startpos_endpos / std::sin(theta) - r * std::tan(theta / 2.0);
 
-    if(std::abs(r) < r_min){
+    if (std::abs(r) < r_min) {
       return curve_paths;
     }
 
-    CurvePath circle_path{start_pos.x, start_pos.y, start_pos.phi,  r * theta, r};
+    CurvePath circle_path{start_pos.x, start_pos.y, start_pos.phi, r * theta,
+                          r};
     Pos3d min_pos = CalEndPosWithACurvePath(circle_path);
     CurvePath line_path{min_pos.x, min_pos.y, min_pos.phi, line_length, 0};
     curve_paths.push_back(circle_path);
@@ -350,24 +358,29 @@ std::vector<CurvePath> CalCurvePathConnectTwoPose(const Pos3d& start_pos, const 
 
   return curve_paths;
 }
-  
-std::vector<Pos3d> GetTrajFromCurvePathsConnect(const Pos3d& start_pos, const Pos3d& end_pos, double r_min, double resolution){
-     std::vector<Pos3d> traj_points;
-     std::vector<CurvePath> curve_paths = CalCurvePathConnectTwoPose( start_pos, end_pos, r_min);
-     if(curve_paths.empty()){
-      return traj_points;
-     }
 
-     for(const auto &path: curve_paths){
-      int traj_point_num = std::abs(path.dist) / resolution;
-      for(int i = 0; i< traj_point_num;++i){
-        const Pos3d path_start_pos{path.x, path.y, path.phi};
-        Pos3d temp_pos = CalEndPosWithACurvePath(path_start_pos, sign(path.dist) * i * resolution, path.radius);
-        traj_points.push_back(temp_pos);
-      }
-     }
-
-     return traj_points;
+std::vector<Pos3d> GetTrajFromCurvePathsConnect(const Pos3d &start_pos,
+                                                const Pos3d &end_pos,
+                                                double r_min,
+                                                double resolution) {
+  std::vector<Pos3d> traj_points;
+  std::vector<CurvePath> curve_paths =
+      CalCurvePathConnectTwoPose(start_pos, end_pos, r_min);
+  if (curve_paths.empty()) {
+    return traj_points;
   }
+
+  for (const auto &path : curve_paths) {
+    int traj_point_num = std::abs(path.dist) / resolution;
+    for (int i = 0; i < traj_point_num; ++i) {
+      const Pos3d path_start_pos{path.x, path.y, path.phi};
+      Pos3d temp_pos = CalEndPosWithACurvePath(
+          path_start_pos, sign(path.dist) * i * resolution, path.radius);
+      traj_points.push_back(temp_pos);
+    }
+  }
+
+  return traj_points;
+}
 
 }  // namespace math
