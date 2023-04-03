@@ -1,18 +1,18 @@
-#include "reeds_shepp_path.h"
-
 #include <cmath>
 
-ReedShepp::ReedShepp(const VehicleParam& vehicle_param, const WarmStartConfig& warm_start_config)
-    : vehicle_param_(vehicle_param), warm_start_config_(warm_start_config)
-      {
+#include "reeds_shepp_path.h"
+
+ReedShepp::ReedShepp(const VehicleParam& vehicle_param,
+                     const WarmStartConfig& warm_start_config)
+    : vehicle_param_(vehicle_param), warm_start_config_(warm_start_config) {
   std::cout << "max_kappa_" << vehicle_param_.max_steer_angle << std::endl;
   std::cout << "steer_ratio" << vehicle_param_.steer_ratio << std::endl;
-  std::cout << "wheel_base" << vehicle_param_.wheel_base<< std::endl;
+  std::cout << "wheel_base" << vehicle_param_.wheel_base << std::endl;
 
-  max_kappa_ = std::tan(vehicle_param_.max_steer_angle /
-                        vehicle_param_.steer_ratio) /
-               vehicle_param_.wheel_base;
-  //AINFO_IF(FLAGS_enable_parallel_hybrid_a) << "parallel REEDShepp";
+  max_kappa_ =
+      std::tan(vehicle_param_.max_steer_angle / vehicle_param_.steer_ratio) /
+      vehicle_param_.wheel_base;
+  // AINFO_IF(FLAGS_enable_parallel_hybrid_a) << "parallel REEDShepp";
 }
 
 std::pair<double, double> ReedShepp::calc_tau_omega(const double u,
@@ -40,10 +40,10 @@ bool ReedShepp::ShortestRSP(const std::shared_ptr<Node3d> start_node,
                             const std::shared_ptr<Node3d> end_node,
                             std::shared_ptr<ReedSheppPath> optimal_path) {
   std::vector<ReedSheppPath> all_possible_paths;
-   
+
   if (!GenerateRSP(start_node, end_node, &all_possible_paths)) {
     std::cout << "Fail to generate different combination of Reed Shepp "
-              "paths";
+                 "paths";
     return false;
   }
 
@@ -74,14 +74,14 @@ bool ReedShepp::ShortestRSP(const std::shared_ptr<Node3d> start_node,
     for (size_t i = 0;
          i < all_possible_paths[optimal_path_index].segs_types.size(); ++i) {
       std::cout << "types are "
-             << all_possible_paths[optimal_path_index].segs_types[i];
+                << all_possible_paths[optimal_path_index].segs_types[i];
     }
     std::cout << "x, y, phi are: "
-           << all_possible_paths[optimal_path_index].x.back() << ", "
-           << all_possible_paths[optimal_path_index].y.back() << ", "
-           << all_possible_paths[optimal_path_index].phi.back();
+              << all_possible_paths[optimal_path_index].x.back() << ", "
+              << all_possible_paths[optimal_path_index].y.back() << ", "
+              << all_possible_paths[optimal_path_index].phi.back();
     std::cout << "end x, y, phi are: " << end_node->GetX() << ", "
-           << end_node->GetY() << ", " << end_node->GetPhi();
+              << end_node->GetY() << ", " << end_node->GetPhi();
     return false;
   }
   (*optimal_path).x = all_possible_paths[optimal_path_index].x;
@@ -99,7 +99,8 @@ bool ReedShepp::ShortestRSP(const std::shared_ptr<Node3d> start_node,
 
 // bool ReedShepp::GenerateRSPs(const std::shared_ptr<Node3d> start_node,
 //                              const std::shared_ptr<Node3d> end_node,
-//                              std::vector<ReedSheppPath>* all_possible_paths) {
+//                              std::vector<ReedSheppPath>* all_possible_paths)
+//                              {
 //   // if (FLAGS_enable_parallel_hybrid_a) {
 //   //   // AINFO << "parallel hybrid a*";
 //   //   if (!GenerateRSPPar(start_node, end_node, all_possible_paths)) {
@@ -118,7 +119,6 @@ bool ReedShepp::ShortestRSP(const std::shared_ptr<Node3d> start_node,
 bool ReedShepp::GenerateRSP(const std::shared_ptr<Node3d> start_node,
                             const std::shared_ptr<Node3d> end_node,
                             std::vector<ReedSheppPath>* all_possible_paths) {
-  
   double dx = end_node->GetX() - start_node->GetX();
   double dy = end_node->GetY() - start_node->GetY();
   double dphi = end_node->GetPhi() - start_node->GetPhi();
@@ -134,8 +134,7 @@ bool ReedShepp::GenerateRSP(const std::shared_ptr<Node3d> start_node,
 
   double x = (c * dx + s * dy) * max_kappa_;
   double y = (-s * dx + c * dy) * max_kappa_;
-  //std::cout << "Start GenerateRSP" << std::endl;
-
+  // std::cout << "Start GenerateRSP" << std::endl;
 
   if (!SCS(x, y, dphi, all_possible_paths)) {
     std::cout << "Fail at SCS";
@@ -914,8 +913,7 @@ bool ReedShepp::SetRSP(const int size, const double* lengths, const char* types,
 bool ReedShepp::GenerateLocalConfigurations(
     const std::shared_ptr<Node3d> start_node,
     const std::shared_ptr<Node3d> end_node, ReedSheppPath* shortest_path) {
-  double step_scaled =
-      warm_start_config_.step_size * max_kappa_;
+  double step_scaled = warm_start_config_.step_size * max_kappa_;
 
   size_t point_num = static_cast<size_t>(
       std::floor(shortest_path->total_length / step_scaled +

@@ -1,13 +1,14 @@
 #ifndef RS_PATH
 #define RS_PATH
 
+#include <omp.h>
+
+#include <iostream>
 #include <limits>
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
-#include <omp.h>
-#include <iostream>
 
 #include "math_utils.h"
 #include "node3d.h"
@@ -32,7 +33,8 @@ struct RSPParam {
 
 class ReedShepp {
  public:
-  ReedShepp(const VehicleParam& vehicle_param, const WarmStartConfig& warm_start_config);
+  ReedShepp(const VehicleParam& vehicle_param,
+            const WarmStartConfig& warm_start_config);
   virtual ~ReedShepp() = default;
   // Pick the shortest path from all possible combination of movement primitives
   // by Reed Shepp
@@ -104,4 +106,4 @@ class ReedShepp {
   double max_kappa_;
 };
 
-#endif 
+#endif

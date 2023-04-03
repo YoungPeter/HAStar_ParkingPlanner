@@ -386,7 +386,7 @@ bool HybridAStar::GetTemporalProfile(HybridAStartResult* result) {
 }
 
 bool HybridAStar::Plan(
-    double sx, double sy, double sphi, double ex, double ey, double ephi,
+    const Pos3d& start_pose, const Pos3d& end_pose,
     const std::vector<double>& XYbounds,
     const std::vector<std::vector<Vec2d>>& obstacles_vertices_vec,
     HybridAStartResult* result) {
@@ -418,9 +418,11 @@ bool HybridAStar::Plan(
   // load XYbounds
   XYbounds_ = XYbounds;
   // load nodes and obstacles
-  start_node_.reset(new Node3d({sx}, {sy}, {sphi}, XYbounds_,
+  start_node_.reset(new Node3d({start_pose.x}, {start_pose.y}, {start_pose.phi},
+                               XYbounds_,
                                warm_start_config_.grid_a_star_xy_resolution));
-  end_node_.reset(new Node3d({ex}, {ey}, {ephi}, XYbounds_,
+  end_node_.reset(new Node3d({end_pose.x}, {end_pose.y}, {end_pose.phi},
+                             XYbounds_,
                              warm_start_config_.grid_a_star_xy_resolution));
   if (!ValidityCheck(start_node_)) {
     std::cout << "start_node in collision with obstacles";
@@ -431,8 +433,8 @@ bool HybridAStar::Plan(
     return false;
   }
   // double map_time = Clock::NowInSeconds();
-  grid_a_star_heuristic_generator_->GenerateDpMap(ex, ey, XYbounds_,
-                                                  obstacles_linesegments_vec_);
+  grid_a_star_heuristic_generator_->GenerateDpMap(
+      end_pose.x, end_pose.y, XYbounds_, obstacles_linesegments_vec_);
   // std::cout << "map time " << Clock::NowInSeconds() - map_time;
   //  load open set, pq
   open_set_.emplace(start_node_->GetIndex(), start_node_);

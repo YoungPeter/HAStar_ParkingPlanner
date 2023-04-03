@@ -23,12 +23,12 @@ struct HybridAStartResult {
 
 class HybridAStar {
  public:
-  explicit HybridAStar(const WarmStartConfig& warm_start_config, const VehicleParam &vehicle_param);
+  explicit HybridAStar(const WarmStartConfig& warm_start_config,
+                       const VehicleParam& vehicle_param);
   virtual ~HybridAStar() = default;
-  bool Plan(double sx, double sy, double sphi, double ex, double ey,
-            double ephi, const std::vector<double>& XYbounds,
-            const std::vector<std::vector<Vec2d>>&
-                obstacles_vertices_vec,
+  bool Plan(const Pos3d& start_pose, const Pos3d& end_pose,
+            const std::vector<double>& XYbounds,
+            const std::vector<std::vector<Vec2d>>& obstacles_vertices_vec,
             HybridAStartResult* result);
   bool TrajectoryPartition(const HybridAStartResult& result,
                            std::vector<HybridAStartResult>* partitioned_result);
@@ -77,8 +77,7 @@ class HybridAStar {
   std::shared_ptr<Node3d> start_node_;
   std::shared_ptr<Node3d> end_node_;
   std::shared_ptr<Node3d> final_node_;
-  std::vector<std::vector<LineSegment2d>>
-      obstacles_linesegments_vec_;
+  std::vector<std::vector<LineSegment2d>> obstacles_linesegments_vec_;
 
   struct cmp {
     bool operator()(const std::pair<std::string, double>& left,

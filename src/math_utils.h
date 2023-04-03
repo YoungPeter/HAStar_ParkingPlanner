@@ -1,9 +1,10 @@
 #ifndef MATH_UTILS
 #define MATH_UTILS
 
-#include <utility>
 #include <memory>
+#include <utility>
 #include <vector>
+
 #include "basic_type.h"
 
 #define M_PI 3.14159265358979323846
@@ -29,10 +30,16 @@ double CalProjectInX(const Pos3d &pos1, const Pos3d &pos2);
 double CalProjectInY(const Pos3d &pos, const Vec2d &point);
 double CalProjectInY(const Pos3d &pos1, const Pos3d &pos2);
 void ConnectByLineCircle(Pos3d current_pos, Pos3d end_pos);
-Pos3d CalEndPosWithACurvePath(const Pos3d& start_pos, double dist, double radius);
+Pos3d CalEndPosWithACurvePath(const Pos3d &start_pos, double dist,
+                              double radius);
 Pos3d CalEndPosWithACurvePath(CurvePath curve_path);
-std::vector<CurvePath> CalCurvePathConnectTwoPose(const Pos3d& start_pos, const Pos3d& end_pos, double r_min);
-std::vector<Pos3d> GetTrajFromCurvePathsConnect(const Pos3d& start_pos, const Pos3d& end_pos, double r_min, double resolution);
+std::vector<CurvePath> CalCurvePathConnectTwoPose(const Pos3d &start_pos,
+                                                  const Pos3d &end_pos,
+                                                  double r_min);
+std::vector<Pos3d> GetTrajFromCurvePathsConnect(const Pos3d &start_pos,
+                                                const Pos3d &end_pos,
+                                                double r_min,
+                                                double resolution);
 
 }  // namespace math
 

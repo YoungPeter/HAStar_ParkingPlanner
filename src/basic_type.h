@@ -1,25 +1,16 @@
 #ifndef BASIC_TYPE
 #define BASIC_TYPE
 
+#include <vector>
+
 struct VehicleParam {
   double front_edge_to_center;
   double back_edge_to_center;
-  double left_edge_to_center;
-  double right_edge_to_center;
   double length;
   double width;
-  double height;
-  double min_turn_radius;
-  double max_acceleration;
-  double max_deceleration;
   double max_steer_angle;
-  double max_steer_angle_rate;
   double steer_ratio;
   double wheel_base;
-  double wheel_rolling_radius;
-  double max_abs_speed_when_stopped;
-  double brake_deadzone;
-  double throttle_deadzone;
 };
 
 struct WarmStartConfig {
@@ -78,4 +69,10 @@ struct Box2d {
   double sin_heading_ = 0.0;
 };
 
+struct ParkingScenario {
+  Pos3d start_pos;
+  Pos3d end_pos;
+  std::vector<double> boundary;
+  std::vector<std::vector<Vec2d>> obstacles;
+};
 #endif
