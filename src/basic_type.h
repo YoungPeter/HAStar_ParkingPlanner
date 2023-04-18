@@ -32,8 +32,8 @@ struct WarmStartConfig {
 };
 
 struct Vec2d {
-  double x_ = 0.0;
-  double y_ = 0.0;
+  double x = 0.0;
+  double y = 0.0;
 };
 
 struct Pos3d {
@@ -43,11 +43,11 @@ struct Pos3d {
 };
 
 struct LineSegment2d {
-  Vec2d start_;
-  Vec2d end_;
-  Vec2d unit_direction_;
-  double heading_ = 0.0;
-  double length_ = 0.0;
+  Vec2d start;
+  Vec2d end;
+  Vec2d unit_direction;
+  double heading = 0.0;
+  double length = 0.0;
 };
 
 struct CurvePath {
@@ -59,14 +59,14 @@ struct CurvePath {
 };
 
 struct Box2d {
-  Vec2d center_;
-  double length_ = 0.0;
-  double width_ = 0.0;
-  double half_length_ = 0.0;
-  double half_width_ = 0.0;
-  double heading_ = 0.0;
-  double cos_heading_ = 1.0;
-  double sin_heading_ = 0.0;
+  Vec2d center;
+  double length = 0.0;
+  double width = 0.0;
+  double half_length = 0.0;
+  double half_width = 0.0;
+  double heading = 0.0;
+  double cos_heading = 1.0;
+  double sin_heading = 0.0;
 };
 
 struct ParkingScenario {

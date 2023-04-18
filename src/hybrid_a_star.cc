@@ -401,8 +401,8 @@ bool HybridAStar::Plan(
     std::vector<LineSegment2d> obstacle_linesegments;
     for (size_t i = 0; i < vertices_num - 1; ++i) {
       Vec2d start = obstacle_vertices[i], end = obstacle_vertices[i + 1];
-      const double dx = end.x_ - start.x_;
-      const double dy = end.y_ - start.y_;
+      const double dx = end.x - start.x;
+      const double dy = end.y - start.y;
       const double length = std::hypot(dx, dy);
       Vec2d unit_direction =
           (length <= kMathEpsilon ? Vec2d{0, 0}

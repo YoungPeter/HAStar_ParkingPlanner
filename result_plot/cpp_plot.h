@@ -20,17 +20,17 @@ void PlotObstacles(std::vector<std::vector<Vec2d>> obstacles_vertices_vec) {
     std::vector<double> obstacles_x;
     std::vector<double> obstacles_y;
     for (size_t i = 0; i < vertices_num; ++i) {
-      obstacles_x.emplace_back(obstacles_vertices[i].x_);
-      obstacles_y.emplace_back(obstacles_vertices[i].y_);
-      obstacles_x.emplace_back(obstacles_vertices[i + 1].x_);
-      obstacles_y.emplace_back(obstacles_vertices[i + 1].y_);
+      obstacles_x.emplace_back(obstacles_vertices[i].x);
+      obstacles_y.emplace_back(obstacles_vertices[i].y);
+      obstacles_x.emplace_back(obstacles_vertices[i + 1].x);
+      obstacles_y.emplace_back(obstacles_vertices[i + 1].y);
       plt::plot(obstacles_x, obstacles_y, "blue");
     }
 
-    obstacles_x.emplace_back(obstacles_vertices.back().x_);
-    obstacles_y.emplace_back(obstacles_vertices.back().y_);
-    obstacles_x.emplace_back(obstacles_vertices[0].x_);
-    obstacles_y.emplace_back(obstacles_vertices[0].y_);
+    obstacles_x.emplace_back(obstacles_vertices.back().x);
+    obstacles_y.emplace_back(obstacles_vertices.back().y);
+    obstacles_x.emplace_back(obstacles_vertices[0].x);
+    obstacles_y.emplace_back(obstacles_vertices[0].y);
     plt::plot(obstacles_x, obstacles_y, "blue");
   }
 }
@@ -77,11 +77,11 @@ void PlotVehicle(const VehicleParam &vehicle_param, double x, double y,
 
   std::vector<double> vehicle_corner_x, vehicle_corner_y;
   for (const auto &coner : corners) {
-    vehicle_corner_x.emplace_back(coner.x_);
-    vehicle_corner_y.emplace_back(coner.y_);
+    vehicle_corner_x.emplace_back(coner.x);
+    vehicle_corner_y.emplace_back(coner.y);
   }
-  vehicle_corner_x.emplace_back(corners.front().x_);
-  vehicle_corner_y.emplace_back(corners.front().y_);
+  vehicle_corner_x.emplace_back(corners.front().x);
+  vehicle_corner_y.emplace_back(corners.front().y);
 
   plt::plot(vehicle_corner_x, vehicle_corner_y, "green");
   plt::axis("equal");

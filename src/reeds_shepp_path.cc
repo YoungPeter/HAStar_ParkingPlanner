@@ -5,14 +5,9 @@
 ReedShepp::ReedShepp(const VehicleParam& vehicle_param,
                      const WarmStartConfig& warm_start_config)
     : vehicle_param_(vehicle_param), warm_start_config_(warm_start_config) {
-  std::cout << "max_kappa_" << vehicle_param_.max_steer_angle << std::endl;
-  std::cout << "steer_ratio" << vehicle_param_.steer_ratio << std::endl;
-  std::cout << "wheel_base" << vehicle_param_.wheel_base << std::endl;
-
   max_kappa_ =
       std::tan(vehicle_param_.max_steer_angle / vehicle_param_.steer_ratio) /
       vehicle_param_.wheel_base;
-  // AINFO_IF(FLAGS_enable_parallel_hybrid_a) << "parallel REEDShepp";
 }
 
 std::pair<double, double> ReedShepp::calc_tau_omega(const double u,
