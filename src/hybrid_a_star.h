@@ -35,6 +35,7 @@ class HybridAStar {
 
  private:
   bool AnalyticExpansion(std::shared_ptr<Node3d> current_node);
+  bool IsPathVaild(const std::vector<Pos3d>& curve_path);
   // check collision and validity
   bool ValidityCheck(std::shared_ptr<Node3d> node);
   // check Reeds Shepp path collision and validity
@@ -42,6 +43,9 @@ class HybridAStar {
   // load the whole RSP as nodes and add to the close set
   std::shared_ptr<Node3d> LoadRSPinCS(
       const std::shared_ptr<ReedSheppPath> reeds_shepp_to_end,
+      std::shared_ptr<Node3d> current_node);
+  std::shared_ptr<Node3d> GenerateFinalNode(
+      const std::vector<Pos3d>& curve_path,
       std::shared_ptr<Node3d> current_node);
   std::shared_ptr<Node3d> Next_node_generator(
       std::shared_ptr<Node3d> current_node, size_t next_node_index);
@@ -53,7 +57,7 @@ class HybridAStar {
   bool GetResult(HybridAStartResult* result);
   bool GetTemporalProfile(HybridAStartResult* result);
   bool GenerateSpeedAcceleration(HybridAStartResult* result);
-  //bool GenerateSCurveSpeedAcceleration(HybridAStartResult* result);
+  // bool GenerateSCurveSpeedAcceleration(HybridAStartResult* result);
 
  private:
   WarmStartConfig warm_start_config_;
@@ -68,6 +72,8 @@ class HybridAStar {
   double traj_gear_switch_penalty_ = 0.0;
   double traj_steer_penalty_ = 0.0;
   double traj_steer_change_penalty_ = 0.0;
+  double max_kappa_ = 0.0;
+  double min_radius_ = 0.0;
   double heu_rs_forward_penalty_ = 0.0;
   double heu_rs_back_penalty_ = 0.0;
   double heu_rs_gear_switch_penalty_ = 0.0;

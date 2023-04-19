@@ -26,6 +26,7 @@ class Node3d {
   int GetGridX() const { return x_grid_; }
   int GetGridY() const { return y_grid_; }
   int GetGridPhi() const { return phi_grid_; }
+  Pos3d GetPose() const { return Pos3d{x_, y_, phi_}; }
   double GetX() const { return x_; }
   double GetY() const { return y_; }
   double GetPhi() const { return phi_; }

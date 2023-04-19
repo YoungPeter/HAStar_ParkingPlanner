@@ -20,24 +20,84 @@ HybridAStar::HybridAStar(const WarmStartConfig& warm_start_config,
   traj_gear_switch_penalty_ = warm_start_config_.traj_gear_switch_penalty;
   traj_steer_penalty_ = warm_start_config_.traj_steer_penalty;
   traj_steer_change_penalty_ = warm_start_config_.traj_steer_change_penalty;
+  max_kappa_ =
+      std::tan(vehicle_param_.max_steer_angle / vehicle_param_.steer_ratio) /
+      vehicle_param_.wheel_base;
+  min_radius_ = 1.0 / max_kappa_;
 }
 
 bool HybridAStar::AnalyticExpansion(std::shared_ptr<Node3d> current_node) {
-  std::shared_ptr<ReedSheppPath> reeds_shepp_to_check =
-      std::make_shared<ReedSheppPath>();
-  if (!reed_shepp_generator_->ShortestRSP(current_node, end_node_,
-                                          reeds_shepp_to_check)) {
-    std::cout << "ShortestRSP failed";
+  // std::shared_ptr<ReedSheppPath> reeds_shepp_to_check =
+  //     std::make_shared<ReedSheppPath>();
+  // if (!reed_shepp_generator_->ShortestRSP(current_node, end_node_,
+  //                                         reeds_shepp_to_check)) {
+  //   std::cout << "ShortestRSP failed";
+  //   return false;
+  // }
+
+  // if (!RSPCheck(reeds_shepp_to_check)) {
+  //   return false;
+  // }
+
+  // std::cout << "Reach the end configuration with Reed Sharp";
+  // // load the whole RSP as nodes and add to the close set
+  // final_node_ = LoadRSPinCS(reeds_shepp_to_check, current_node);
+
+  std::vector<Pos3d> curve_path = math::GetTrajFromCurvePathsConnect(
+      current_node->GetPose(), end_node_->GetPose(), min_radius_,
+      xy_grid_resolution_);
+  if (!IsPathVaild(curve_path)) {
     return false;
   }
 
-  if (!RSPCheck(reeds_shepp_to_check)) {
+  final_node_ = GenerateFinalNode(curve_path, current_node);
+  return true;
+}
+
+std::shared_ptr<Node3d> HybridAStar::GenerateFinalNode(
+    const std::vector<Pos3d>& curve_path,
+    std::shared_ptr<Node3d> current_node) {
+  std::vector<double> traversed_x;
+  std::vector<double> traversed_y;
+  std::vector<double> traversed_phi;
+  for (const auto& pose : curve_path) {
+    traversed_x.push_back(pose.x);
+    traversed_y.push_back(pose.y);
+    traversed_phi.push_back(pose.phi);
+  }
+
+  std::shared_ptr<Node3d> end_node = std::shared_ptr<Node3d>(
+      new Node3d(traversed_x, traversed_y, traversed_phi, XYbounds_,
+                 warm_start_config_.grid_a_star_xy_resolution));
+  end_node->SetPre(current_node);
+  close_set_.emplace(end_node->GetIndex(), end_node);
+  return end_node;
+}
+
+bool HybridAStar::IsPathVaild(const std::vector<Pos3d>& curve_path) {
+  if (curve_path.empty()) {
     return false;
   }
 
-  std::cout << "Reach the end configuration with Reed Sharp";
-  // load the whole RSP as nodes and add to the close set
-  final_node_ = LoadRSPinCS(reeds_shepp_to_check, current_node);
+  if (obstacles_linesegments_vec_.empty()) {
+    return true;
+  }
+
+  for (const auto& pose : curve_path) {
+    if (pose.x > XYbounds_[1] || pose.x < XYbounds_[0] ||
+        pose.y > XYbounds_[3] || pose.y < XYbounds_[2]) {
+      return false;
+    }
+    Box2d bounding_box =
+        Node3d::GetBoundingBox(vehicle_param_, pose.x, pose.y, pose.phi);
+    for (const auto& obstacle_linesegments : obstacles_linesegments_vec_) {
+      for (const LineSegment2d& linesegment : obstacle_linesegments) {
+        if (math::HasOverlap(bounding_box, linesegment)) {
+          return false;
+        }
+      }
+    }
+  }
   return true;
 }
 
